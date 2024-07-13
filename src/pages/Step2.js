@@ -1,3 +1,4 @@
+import Localbase from "localbase";
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
@@ -69,18 +70,17 @@ const Step2 = () => {
     { name: "cashpoint", odds: {}, money: 500 },
     { name: "spreadex", odds: {}, money: 1000 },
   ]);
-
+  var database = new Localbase("arbitrage-db");
   const navigate = useNavigate();
+  const savedTeam = JSON.parse(localStorage.getItem("team")) || [];
 
   useEffect(() => {
-    const savedTeam = JSON.parse(localStorage.getItem("team")) || [];
-    const formattedTeam = savedTeam.map((name) => ({
+    const formattedTeam = savedTeam?.team?.map((name) => ({
       name,
       notRegisteredSites: [],
     }));
     setTeam(formattedTeam);
   }, []);
-
   const handleCheckboxChange = (memberIndex, siteName) => {
     const newTeam = [...team];
     const member = newTeam[memberIndex];
@@ -93,8 +93,18 @@ const Step2 = () => {
       member.notRegisteredSites.push(siteName);
     }
 
+    const createdTeam = {
+      team,
+      uid: savedTeam.uid,
+    };
+
+    console.log(savedTeam);
+    database
+      .collection("teams")
+      .doc({ uid: savedTeam.uid })
+      .update({ team: newTeam });
     setTeam(newTeam);
-    localStorage.setItem("team", JSON.stringify(newTeam));
+    localStorage.setItem("team", JSON.stringify(createdTeam));
   };
 
   const handleNextStep = () => {
@@ -104,11 +114,11 @@ const Step2 = () => {
   return (
     <Container>
       <h1>Step 2: Select Sites Not Registered On</h1>
-      {team.map((member, memberIndex) => (
+      {team?.map((member, memberIndex) => (
         <MemberContainer key={memberIndex}>
           <MemberTitle>{member.name}</MemberTitle>
           <SiteList>
-            {sites.map((site, siteIndex) => (
+            {sites?.map((site, siteIndex) => (
               <SiteItem key={siteIndex}>
                 <SiteLabel>
                   <SiteCheckbox

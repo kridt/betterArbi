@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
+import Localbase from "localbase";
+import { generateUid } from "../components/generateUid";
 
 const Container = styled.div`
   display: flex;
@@ -73,6 +75,7 @@ const TeamCreator = () => {
   const [numParticipants, setNumParticipants] = useState(1);
   const [participants, setParticipants] = useState({ 1: "", 2: "", 3: "" });
   const navigate = useNavigate();
+  const database = new Localbase("arbitrage-db");
   const handleNumParticipantsChange = (e) => {
     setNumParticipants(parseInt(e.target.value));
   };
@@ -91,10 +94,17 @@ const TeamCreator = () => {
       team.push(participants[i]);
     }
 
-    localStorage.setItem("team", JSON.stringify(team));
+    const createdTeam = {
+      team,
+      uid: generateUid(),
+    };
+
+    database.collection("teams").add(createdTeam); // Save the team to the database
+
+    localStorage.setItem("team", JSON.stringify(createdTeam));
 
     navigate("/step2");
-    console.log("Team:", team);
+    console.log("Team:", createdTeam);
   };
 
   return (

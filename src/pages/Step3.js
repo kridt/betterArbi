@@ -1,8 +1,8 @@
-import axios from "axios";
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import Loader from "../components/Loader";
 import { useNavigate } from "react-router-dom";
+import Localbase from "localbase";
 
 const Container = styled.div`
   padding: 20px;
@@ -92,10 +92,10 @@ const Step3 = () => {
     { name: "cashpoint", odds: {}, money: 500 },
     { name: "spreadex", odds: {}, money: 1000 },
   ]);
-
+  var database = new Localbase("arbitrage-db");
+  const savedTeam = JSON.parse(localStorage.getItem("team")) || [];
   useEffect(() => {
-    const savedTeam = JSON.parse(localStorage.getItem("team")) || [];
-    setTeam(savedTeam);
+    setTeam(savedTeam?.team);
   }, []);
 
   const handleOddsChange = (memberIndex, siteName, field, value) => {
@@ -105,7 +105,11 @@ const Step3 = () => {
     if (!member.odds[siteName]) member.odds[siteName] = {};
     member.odds[siteName][field] = value.replace(",", ".");
     setTeam(newTeam);
-    localStorage.setItem("team", JSON.stringify(newTeam));
+
+    database
+      .collection("teams")
+      .doc({ uid: savedTeam.uid })
+      .update({ team: newTeam });
   };
 
   const calculateEarnings = () => {
@@ -138,8 +142,14 @@ const Step3 = () => {
       .then((response) => response.json())
       .then((data) => {
         localStorage.setItem("earnings", JSON.stringify(data));
-        navigate("/done");
+
+        database
+          .collection("teams")
+          .doc({ uid: savedTeam.uid })
+          .update({ bet1Results: data });
+
         setLoading(false);
+        navigate("/done");
       })
       .catch((error) => {
         console.error("Error:", error);
