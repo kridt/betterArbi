@@ -91,6 +91,7 @@ const Step3 = () => {
     { name: "expekt", odds: {}, money: 600 },
     { name: "cashpoint", odds: {}, money: 500 },
     { name: "spreadex", odds: {}, money: 1000 },
+    { name: "Cambobet", odds: {}, money: 1000 },
   ]);
   var database = new Localbase("arbitrage-db");
   const savedTeam = JSON.parse(localStorage.getItem("team")) || [];
