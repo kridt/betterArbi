@@ -83,7 +83,7 @@ const Step3 = () => {
     { name: "bet365", odds: {}, money: 1000 },
     { name: "leovegas", odds: {}, money: 1000 },
     { name: "bwin", odds: {}, money: 1000 },
-    { name: "comeon", odds: {}, money: 2000 },
+    { name: "comeon", odds: {}, money: 1000 },
     { name: "nordicbet", odds: {}, money: 500 },
     { name: "betsson", odds: {}, money: 500 },
     { name: "888sport", odds: {}, money: 500 },
