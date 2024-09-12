@@ -166,7 +166,7 @@ const Step3 = () => {
         <>
           <h1>Step 3: Enter Odds for Registered Sites</h1>
           <Container>
-            {team?.map((member, memberIndex) => (
+            {team.map((member, memberIndex) => (
               <MemberContainer key={memberIndex}>
                 <MemberTitle>{member?.name}</MemberTitle>
                 <Header>
