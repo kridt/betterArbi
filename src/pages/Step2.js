@@ -68,7 +68,7 @@ const Step2 = () => {
     { name: "bet25", odds: {}, money: 500 },
     { name: "expekt", odds: {}, money: 600 },
     { name: "cashpoint", odds: {}, money: 500 },
-    { name: "spreadex", odds: {}, money: 1000 },
+    { name: "spreadex", odds: {}, money: 500 },
     { name: "TipWin", odds: {}, money: 1600 },
   ]);
   var database = new Localbase("arbitrage-db");
