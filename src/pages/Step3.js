@@ -90,7 +90,7 @@ const Step3 = () => {
     { name: "bet25", odds: {}, money: 500 },
     { name: "expekt", odds: {}, money: 600 },
     { name: "cashpoint", odds: {}, money: 500 },
-    { name: "spreadex", odds: {}, money: 1000 },
+    { name: "spreadex", odds: {}, money: 500 },
     { name: "TipWin", odds: {}, money: 1600 },
   ]);
   var database = new Localbase("arbitrage-db");
@@ -166,9 +166,9 @@ const Step3 = () => {
         <>
           <h1>Step 3: Enter Odds for Registered Sites</h1>
           <Container>
-            {team.map((member, memberIndex) => (
+            {team?.map((member, memberIndex) => (
               <MemberContainer key={memberIndex}>
-                <MemberTitle>{member.name}</MemberTitle>
+                <MemberTitle>{member?.name}</MemberTitle>
                 <Header>
                   <div>Betting Site</div>
                   <div>1</div>
@@ -178,7 +178,7 @@ const Step3 = () => {
                 <SiteList>
                   {sites
                     .filter(
-                      (site) => !member.notRegisteredSites.includes(site.name)
+                      (site) => !member.notRegisteredSites?.includes(site.name)
                     )
                     .map((site, siteIndex) => (
                       <SiteItem key={siteIndex}>
@@ -187,9 +187,9 @@ const Step3 = () => {
                           type="number"
                           step="0.01"
                           value={
-                            member.odds &&
-                            member.odds[site.name] &&
-                            member.odds[site.name]["1"]
+                            member?.odds &&
+                            member?.odds[site.name] &&
+                            member?.odds[site.name]["1"]
                               ? member.odds[site.name]["1"]
                               : ""
                           }
