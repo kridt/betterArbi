@@ -108,30 +108,35 @@ const Step3 = () => {
     return;
   }
 
-  const member = newTeam[memberIndex];
+  // Lav en dyb kopi af det valgte medlem for at undgå mutation
+  const member = { ...newTeam[memberIndex] };
 
-  // Tjek, om member eksisterer
-  if (!member) {
-    console.error('Medlemmet findes ikke på dette indeks:', memberIndex);
-    return;
+  // Hvis odds ikke er defineret, initialiser det som et tomt objekt
+  if (!member.odds) {
+    member.odds = {};
   }
 
-  // Initialiser odds, hvis det ikke findes
-  if (!member.odds) member.odds = {};
+  // Hvis odds[siteName] ikke er defineret, initialiser det som et tomt objekt
+  if (!member.odds[siteName]) {
+    member.odds[siteName] = {};
+  }
 
-  // Initialiser odds[siteName], hvis det ikke findes
-  if (!member.odds[siteName]) member.odds[siteName] = {};
-
-  // Sæt værdien for det specifikke felt
+  // Sæt den nye værdi for det specifikke felt
   member.odds[siteName][field] = value.replace(",", ".");
 
+  // Opdater det valgte medlem i newTeam
+  newTeam[memberIndex] = member;
+
+  // Opdater state med det ændrede team
   setTeam(newTeam);
 
+  // Opdater databasen med det nye team
   database
     .collection("teams")
-    .doc({ uid: savedTeam.uid })
+    .doc(savedTeam.uid)
     .update({ team: newTeam });
 };
+
 
 
   const calculateEarnings = () => {
