@@ -143,7 +143,7 @@ const Step3 = () => {
     setLoading(true);
     const results = team.map((member) => {
       const earnings = sites
-        .filter((site) => !member.notRegisteredSites.includes(site.name))
+        .filter((site) => !member.notRegisteredSites?.includes(site.name))
         .map((site) => {
           const homeWin = site.money * (member.odds[site.name]?.["1"] || 0);
           const draw = site.money * (member.odds[site.name]?.["X"] || 0);
