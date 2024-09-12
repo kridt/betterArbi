@@ -100,18 +100,39 @@ const Step3 = () => {
   }, []);
 
   const handleOddsChange = (memberIndex, siteName, field, value) => {
-    const newTeam = [...team];
-    const member = newTeam[memberIndex];
-    if (!member.odds) member.odds = {};
-    if (!member.odds[siteName]) member.odds[siteName] = {};
-    member.odds[siteName][field] = value.replace(",", ".");
-    setTeam(newTeam);
+  const newTeam = [...team];
 
-    database
-      .collection("teams")
-      .doc({ uid: savedTeam.uid })
-      .update({ team: newTeam });
-  };
+  // Tjek, om memberIndex er gyldigt
+  if (memberIndex < 0 || memberIndex >= newTeam.length) {
+    console.error('Ugyldigt memberIndex:', memberIndex);
+    return;
+  }
+
+  const member = newTeam[memberIndex];
+
+  // Tjek, om member eksisterer
+  if (!member) {
+    console.error('Medlemmet findes ikke på dette indeks:', memberIndex);
+    return;
+  }
+
+  // Initialiser odds, hvis det ikke findes
+  if (!member.odds) member.odds = {};
+
+  // Initialiser odds[siteName], hvis det ikke findes
+  if (!member.odds[siteName]) member.odds[siteName] = {};
+
+  // Sæt værdien for det specifikke felt
+  member.odds[siteName][field] = value.replace(",", ".");
+
+  setTeam(newTeam);
+
+  database
+    .collection("teams")
+    .doc({ uid: savedTeam.uid })
+    .update({ team: newTeam });
+};
+
 
   const calculateEarnings = () => {
     setLoading(true);
