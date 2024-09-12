@@ -187,9 +187,9 @@ const Step3 = () => {
                           type="number"
                           step="0.01"
                           value={
-                            member?.odds &&
-                            member?.odds[site.name] &&
-                            member?.odds[site.name]["1"]
+                            member.odds &&
+                            member.odds[site.name] &&
+                            member.odds[site.name]["1"]
                               ? member.odds[site.name]["1"]
                               : ""
                           }
